@@ -1,0 +1,164 @@
+# Vibe-Genomer Development Configuration
+# Settings optimized for development and testing
+
+# Agent configuration
+agent:
+  max_iterations: 5  # Fewer iterations for faster testing
+  temperature: 0.5   # More deterministic for debugging
+  max_tokens: 1000
+  enable_self_correction: true
+  context:
+    max_history_messages: 20  # Less history for debugging
+    enable_summarization: false
+
+# LLM provider settings
+providers:
+  default: anthropic
+
+  anthropic:
+    model: claude-3-5-haiku-20241022  # Faster, cheaper model for dev
+    api_key_env: ANTHROPIC_API_KEY
+    max_retries: 2
+    timeout: 30
+
+  openai:
+    model: gpt-4o-mini  # Cheaper model for dev
+    api_key_env: OPENAI_API_KEY
+    max_retries: 2
+    timeout: 30
+
+  local:
+    model: deepseek-coder:7b  # Smaller model for dev
+    base_url: http://localhost:11434
+    timeout: 60
+
+# Tool execution settings
+tools:
+  timeout: 120  # Shorter timeout for dev
+  max_retries: 2
+  cache_enabled: true  # Cache for faster repeated tests
+
+  samtools:
+    threads: 2  # Fewer threads for local dev
+    memory_gb: 4
+
+  bedtools:
+    memory_gb: 2
+
+  bcftools:
+    threads: 1
+
+# Verification settings
+verification:
+  enabled: true
+  strict_mode: false  # Warnings instead of errors for dev
+
+  coordinates:
+    default_build: hg38
+    validate_bounds: true
+
+  variants:
+    validate_ref_allele: false  # Disable for faster testing
+    check_databases: false
+
+# RAG settings
+rag:
+  enabled: false  # Disable RAG for simple testing
+  size_threshold_mb: 100
+
+  chunking:
+    chunk_size: 5000  # Smaller chunks for faster indexing
+    chunk_overlap: 500
+
+  vector_search:
+    model: sentence-transformers/all-MiniLM-L6-v2
+    top_k: 3
+
+# Sandbox settings
+sandbox:
+  enabled: false  # Disable sandbox for easier debugging
+  runtime: docker
+
+  docker:
+    image: genomics-sandbox:dev
+    memory_limit: 8g
+    cpu_limit: 4
+    readonly_mounts:
+      - /data/references
+
+  limits:
+    max_time: 600  # 10 minutes
+    max_memory: 8
+    max_disk: 20
+
+# Knowledge base settings
+knowledge:
+  cache_dir: ~/.vibe-genomer/dev/knowledge
+
+  clinvar:
+    enabled: false  # Disable for faster startup
+    update_interval_days: 365
+    db_path: ~/.vibe-genomer/dev/clinvar.db
+
+  ensembl:
+    enabled: true
+    api_url: https://rest.ensembl.org
+    cache_responses: true
+
+  ucsc:
+    enabled: false
+
+# Logging settings
+logging:
+  level: DEBUG  # Verbose logging for development
+  format: rich
+
+  file:
+    enabled: true
+    path: ./logs/vibe-dev.log  # Local directory
+    rotate: true
+    max_bytes: 5242880  # 5MB
+    backup_count: 3
+
+  console:
+    enabled: true
+    colorize: true
+
+# CLI settings
+cli:
+  show_progress: true
+
+  repl:
+    syntax_highlighting: true
+    show_hints: true
+    history_file: ./.repl_history_dev  # Local history
+    max_history: 500
+
+# Workflow settings
+workflows:
+  enabled: true
+  custom_dir: ./workflows  # Local directory
+
+# Performance settings
+performance:
+  parallel_execution: false  # Easier to debug serially
+  max_parallel_jobs: 2
+
+  caching:
+    enabled: true
+    cache_dir: ./.cache  # Local cache directory
+    max_size_gb: 2
+
+# Development-specific settings
+dev:
+  # Enable debug mode
+  debug: true
+
+  # Show detailed error traces
+  show_traces: true
+
+  # Validate all inputs strictly
+  strict_validation: false
+
+  # Mock external services
+  mock_external: false

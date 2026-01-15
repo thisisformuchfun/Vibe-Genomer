@@ -1,0 +1,168 @@
+# Vibe-Genomer Production Configuration
+# Settings optimized for production use
+
+# Agent configuration
+agent:
+  max_iterations: 15  # More iterations for complex tasks
+  temperature: 0.7
+  max_tokens: 4000  # Larger context for production
+  enable_self_correction: true
+  context:
+    max_history_messages: 100
+    enable_summarization: true
+
+# LLM provider settings
+providers:
+  default: anthropic
+
+  anthropic:
+    model: claude-3-5-sonnet-20241022  # Best quality model
+    api_key_env: ANTHROPIC_API_KEY
+    max_retries: 5
+    timeout: 120
+
+  openai:
+    model: gpt-4o
+    api_key_env: OPENAI_API_KEY
+    max_retries: 5
+    timeout: 120
+
+  local:
+    model: deepseek-coder:33b
+    base_url: http://localhost:11434
+    timeout: 300
+
+# Tool execution settings
+tools:
+  timeout: 3600  # 1 hour timeout for long-running tasks
+  max_retries: 5
+  cache_enabled: true
+
+  samtools:
+    threads: 16  # Utilize more cores in production
+    memory_gb: 32
+
+  bedtools:
+    memory_gb: 16
+
+  bcftools:
+    threads: 8
+
+# Verification settings
+verification:
+  enabled: true
+  strict_mode: true  # Fail on validation errors
+
+  coordinates:
+    default_build: hg38
+    validate_bounds: true
+
+  variants:
+    validate_ref_allele: true
+    check_databases: true  # Cross-check with ClinVar
+
+# RAG settings
+rag:
+  enabled: true  # Enable for large files
+  size_threshold_mb: 100
+
+  chunking:
+    chunk_size: 10000
+    chunk_overlap: 1000
+
+  vector_search:
+    model: sentence-transformers/all-MiniLM-L6-v2
+    top_k: 5
+
+# Sandbox settings
+sandbox:
+  enabled: true  # Always sandbox in production
+  runtime: docker
+
+  docker:
+    image: genomics-sandbox:latest
+    memory_limit: 64g
+    cpu_limit: 16
+    readonly_mounts:
+      - /data/references
+      - /data/databases
+
+  limits:
+    max_time: 7200  # 2 hours
+    max_memory: 64
+    max_disk: 500
+
+# Knowledge base settings
+knowledge:
+  cache_dir: /data/vibe-genomer/knowledge
+
+  clinvar:
+    enabled: true
+    update_interval_days: 7  # Update weekly
+    db_path: /data/vibe-genomer/clinvar.db
+
+  ensembl:
+    enabled: true
+    api_url: https://rest.ensembl.org
+    cache_responses: true
+
+  ucsc:
+    enabled: true
+    default_build: hg38
+
+# Logging settings
+logging:
+  level: INFO  # Less verbose in production
+  format: json  # Structured logging for production
+
+  file:
+    enabled: true
+    path: /var/log/vibe-genomer/vibe.log
+    rotate: true
+    max_bytes: 52428800  # 50MB
+    backup_count: 10
+
+  console:
+    enabled: true
+    colorize: false  # Disable colors for log aggregation
+
+# CLI settings
+cli:
+  show_progress: true
+
+  repl:
+    syntax_highlighting: true
+    show_hints: true
+    history_file: ~/.vibe-genomer/.repl_history
+    max_history: 5000
+
+# Workflow settings
+workflows:
+  enabled: true
+  custom_dir: /data/vibe-genomer/workflows
+
+# Performance settings
+performance:
+  parallel_execution: true
+  max_parallel_jobs: 8  # More parallel jobs in production
+
+  caching:
+    enabled: true
+    cache_dir: /data/vibe-genomer/cache
+    max_size_gb: 50  # Larger cache in production
+
+# Production-specific settings
+production:
+  # Enable audit logging
+  audit_logging: true
+  audit_log_path: /var/log/vibe-genomer/audit.log
+
+  # Monitoring
+  monitoring:
+    enabled: true
+    metrics_port: 9090
+
+  # Rate limiting
+  rate_limiting:
+    enabled: true
+    max_requests_per_minute: 60
