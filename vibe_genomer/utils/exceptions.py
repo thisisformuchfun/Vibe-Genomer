@@ -80,6 +80,10 @@ class VerificationError(VibeGenomerError):
     pass
 
 
+# Alias for backward compatibility with tests
+ValidationError = VerificationError
+
+
 class CoordinateValidationError(VerificationError):
     """Raised when genomic coordinates are invalid."""
     pass
