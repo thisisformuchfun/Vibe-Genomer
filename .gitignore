@@ -1,0 +1,105 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# Documentation
+docs/_build/
+site/
+
+# Genomic data files (large)
+*.bam
+*.bam.bai
+*.cram
+*.cram.crai
+*.vcf.gz
+*.vcf.gz.tbi
+*.bcf
+*.bcf.csi
+*.fastq.gz
+*.fq.gz
+*.fa
+*.fasta
+*.fna
+
+# Reference genomes (very large)
+reference_genomes/
+*.2bit
+
+# Knowledge databases (can be large)
+knowledge/databases/*.db
+knowledge/embeddings/*.faiss
+knowledge/embeddings/*.pkl
+
+# Logs
+*.log
+logs/
+
+# API keys and secrets
+.env
+.env.local
+secrets/
+*.key
+*.pem
+
+# Cache
+.cache/
+*.vibeindex
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Docker
+.docker/
+
+# Benchmarks
+benchmarks/results/
+benchmarks/data/
