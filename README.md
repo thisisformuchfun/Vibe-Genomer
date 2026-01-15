@@ -70,5 +70,12 @@ We need experts in **sandboxing**.
 ## 📜 License
 Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
+## 👥 Team
+**Location:** Las Vegas, NV
+**Organization:** Meatbag Labs
+
+**Core Contributors:**
+- Stephen Shaffer ([@thisisformuchfun](https://github.com/thisisformuchfun))
+
 ---
-*Created with
+*Built with Claude Code and passion for open genomics.*
