@@ -1,0 +1,232 @@
+# Vibe-Genomer Default Configuration
+# This file contains default settings for the genomic agent
+
+# Agent configuration
+agent:
+  # Maximum iterations for ReAct loop
+  max_iterations: 10
+
+  # LLM temperature (0.0 - 1.0)
+  # Lower = more deterministic, Higher = more creative
+  temperature: 0.7
+
+  # Max tokens per LLM call
+  max_tokens: 2000
+
+  # Enable self-correction on errors
+  enable_self_correction: true
+
+  # Context window management
+  context:
+    # Max messages to keep in history
+    max_history_messages: 50
+    # Summarize old messages when context gets large
+    enable_summarization: true
+
+# LLM provider settings
+providers:
+  # Default provider to use (anthropic, openai, local)
+  default: anthropic
+
+  # Anthropic (Claude) settings
+  anthropic:
+    model: claude-3-5-sonnet-20241022
+    api_key_env: ANTHROPIC_API_KEY
+    max_retries: 3
+    timeout: 60
+
+  # OpenAI settings
+  openai:
+    model: gpt-4o
+    api_key_env: OPENAI_API_KEY
+    max_retries: 3
+    timeout: 60
+
+  # Local model (Ollama) settings
+  local:
+    model: deepseek-coder:33b
+    base_url: http://localhost:11434
+    timeout: 120
+
+# Tool execution settings
+tools:
+  # Command execution timeout (seconds)
+  timeout: 300
+
+  # Max retries on transient failures
+  max_retries: 3
+
+  # Enable tool output caching
+  cache_enabled: true
+
+  # Tool-specific settings
+  samtools:
+    threads: 4
+    memory_gb: 8
+
+  bedtools:
+    memory_gb: 4
+
+  bcftools:
+    threads: 2
+
+# Verification settings
+verification:
+  # Enable biological validation
+  enabled: true
+
+  # Fail on validation errors (vs warning)
+  strict_mode: true
+
+  # Coordinate validation
+  coordinates:
+    # Reference genome build (hg38, hg19, etc.)
+    default_build: hg38
+    # Check coordinates are in bounds
+    validate_bounds: true
+
+  # Variant validation
+  variants:
+    # Validate REF allele matches reference
+    validate_ref_allele: true
+    # Check against ClinVar/databases
+    check_databases: false
+
+# RAG (Retrieval-Augmented Generation) settings
+rag:
+  # Enable RAG for large files
+  enabled: false
+
+  # File size threshold to trigger RAG (MB)
+  size_threshold_mb: 100
+
+  # Chunking strategy
+  chunking:
+    # Chunk size for indexing
+    chunk_size: 10000
+    # Overlap between chunks
+    chunk_overlap: 1000
+
+  # Vector search settings
+  vector_search:
+    # Embedding model
+    model: sentence-transformers/all-MiniLM-L6-v2
+    # Number of results to retrieve
+    top_k: 5
+
+# Sandbox execution settings
+sandbox:
+  # Enable sandboxed execution
+  enabled: false
+
+  # Container runtime (docker, singularity, none)
+  runtime: docker
+
+  # Docker settings
+  docker:
+    # Base image for execution
+    image: genomics-sandbox:latest
+    # Memory limit
+    memory_limit: 16g
+    # CPU limit
+    cpu_limit: 8
+    # Read-only mounts
+    readonly_mounts:
+      - /data/references
+
+  # Resource limits
+  limits:
+    # Max execution time (seconds)
+    max_time: 3600
+    # Max memory (GB)
+    max_memory: 32
+    # Max disk space (GB)
+    max_disk: 100
+
+# Knowledge base settings
+knowledge:
+  # Local cache directory
+  cache_dir: ~/.vibe-genomer/knowledge
+
+  # ClinVar settings
+  clinvar:
+    enabled: true
+    # Update frequency (days)
+    update_interval_days: 30
+    # Local database path
+    db_path: ~/.vibe-genomer/clinvar.db
+
+  # Ensembl settings
+  ensembl:
+    enabled: true
+    # API endpoint
+    api_url: https://rest.ensembl.org
+    # Cache API responses
+    cache_responses: true
+
+  # UCSC Genome Browser settings
+  ucsc:
+    enabled: true
+    # Default genome build
+    default_build: hg38
+
+# Logging settings
+logging:
+  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  level: INFO
+
+  # Log format
+  format: rich  # rich, json, or simple
+
+  # Log file settings
+  file:
+    enabled: true
+    path: ~/.vibe-genomer/logs/vibe.log
+    # Rotate logs
+    rotate: true
+    max_bytes: 10485760  # 10MB
+    backup_count: 5
+
+  # Console output
+  console:
+    enabled: true
+    # Use colors in output
+    colorize: true
+
+# CLI settings
+cli:
+  # Show progress bars
+  show_progress: true
+
+  # REPL settings
+  repl:
+    # Enable syntax highlighting
+    syntax_highlighting: true
+    # Show hints
+    show_hints: true
+    # History file
+    history_file: ~/.vibe-genomer/.repl_history
+    # Max history entries
+    max_history: 1000
+
+# Workflow templates
+workflows:
+  # Enable pre-built workflow templates
+  enabled: true
+
+  # Custom workflow directory
+  custom_dir: ~/.vibe-genomer/workflows
+
+# Performance settings
+performance:
+  # Enable parallel execution where possible
+  parallel_execution: true
+
+  # Max parallel jobs
+  max_parallel_jobs: 4
+
+  # Enable caching
+  caching:
+    enabled: true
+    cache_dir: ~/.vibe-genomer/cache
+    max_size_gb: 10
